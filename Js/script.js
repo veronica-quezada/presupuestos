@@ -16,14 +16,6 @@ const getGastoObj = (nombre, cantidad) => {
     return JSON.parse(JSON.stringify(NewGasto));
 }
 
-const getBudget = (cantidad) => {
-    NewBudget = {
-    id: getId(),
-    cantidad: parseInt(cantidad)
-    }
-    return JSON.parse(JSON.stringify(NewBudget))
-    }
-
 const addGastoTabla = (Gasto) => {
     const tbody = document.getElementById('tcontenido');
     tbody.innerHTML += `<tr id="elemento${Gasto.id}">
@@ -38,17 +30,16 @@ const addGastoTabla = (Gasto) => {
 
 const inputPresupuesto = () => {
     let presupuestoCantidad = document.getElementById("presupuestoInput").value;
-    let totalPresupuesto = document.getElementById("enviarPresupuesto");
+    let despliegaPresupuesto = document.getElementById("despliegaPresupuesto");
+    despliegaPresupuesto.innerText = presupuestoCantidad;
+    actualizarSaldo();
+}
 
-    totalPresupuesto += Presupuesto.cantidad;
-    console.log('totalPresupuesto:', totalPresupuesto);
-
-    arrayPresupuestos.push(Presupuesto);
-    console.log('arrayPresupuesto:', arrayPresupuesto);
-
-    document.getElementById('despliegaTotal').innerText = totalGastos;
-
-    addGastoTabla(Gasto);
+const actualizarSaldo = () => {
+    let despliegaSaldo = document.getElementById("despliegaSaldo");
+    let presupuestoCantidad = parseFloat(document.getElementById("presupuestoInput").value)
+    let saldoTotal = presupuestoCantidad - totalGastos;
+    despliegaSaldo.innerText = saldoTotal;
 }
 
 const inputGasto = () => {
@@ -65,6 +56,8 @@ const inputGasto = () => {
     console.log('arrayGastos:', arrayGastos);
 
     document.getElementById('despliegaTotal').innerText = totalGastos;
+
+    actualizarSaldo();
 
     addGastoTabla(Gasto);
 }
@@ -84,5 +77,8 @@ const borrarGasto = (id) => {
 
     totalGastos = arrayGastos.reduce((total, valor) => total + valor.cantidad, 0);
     document.getElementById('despliegaTotal').innerText = totalGastos;
+
+    actualizarSaldo();
+
     console.log('2.- arrayGastos:', arrayGastos);
 }
